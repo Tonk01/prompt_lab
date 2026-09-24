@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt experiment</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #eeeeee;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 700px;
+            margin-top: 80px;
+        }
+
+       textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            box-sizing: border-box;
+            background: #1e1e1e;
+            color: #eeeeee;
+            border: 1px solid #444;
+            border-radius: 6px;
+            resize: vertical;
+        }
+
+        .temperature {
+            margin: 20px 0;
+        }
+
+                button {
+            padding: 10px 20px;
+            background: #eeeeee;
+            color: #121212;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #cccccc;
+        }
+
+        #response {
+            margin-top: 30px;
+            padding: 15px;
+            background: #1e1e1e;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1> Prompt Lab</h1>
+
+    <textarea
+        id="prompt"
+        placeholder="Enter a prompt"
+        ></textarea>
+
+    <div class="temperature">
+        <label>
+            Temperature:
+            <span id="temperatureValue"> 0.7 </span>
+        </label>
+
+        <input
+        id="temperature"
+        type="range"
+        min="0"
+        max="2"
+        step="0.1"
+        value="0.7"
+        >
+    </div>
+
+    <button onclick="generate()"> Generate </button>
+
+    <div id="response"></div>
+</div>
+
+<script> 
+    const temperature = document.getElementById("temperature")
+    const temepratureValue = document.getElementById("temperatureValue")
+
+    temperature.addEventListener("input", () => {
+        temepratureValue.textContent = temperature.value
+    });
+
+    async function generate() {
+        const prompt = document.getElementById("prompt").value;
+        const responseBox = document.getElementById("response");
+
+        responseBox.textContent = "Generating...";
+
+        const response = await fetch("/prompt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                prompt: prompt,
+                temperature: parseFloat(temperature.value)
+            })
+        });
+
+        const data = await response.json();
+        responseBox.textContent = data.response;
+    }
+
+</script>
+</body>
+</html>
