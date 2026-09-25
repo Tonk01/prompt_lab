@@ -22,8 +22,8 @@ public class PromptController {
     @PostMapping("/prompt")
     public PromptResponse handlePrompt(@RequestBody PromptRequest request) {
         String response = promptService.generateResponse(
-            request.getPrompt(), request.getTemperature());
+            request.getPrompt(), request.getTemperature(), request.getTop_p());
 
-        return new PromptResponse(response, request.getPrompt(), request.getTemperature());
+        return new PromptResponse(response, request.getPrompt(), request.getTemperature(), request.getTop_p());
     }
 }

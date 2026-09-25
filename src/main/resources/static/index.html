@@ -85,6 +85,20 @@
         step="0.1"
         value="0.7"
         >
+
+        <label>
+            Top P:
+            <span id="topPValue"> 0.9 </span>
+        </label>
+
+        <input
+            id="top_p"
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value="0.9"
+        >
     </div>
 
     <button onclick="generate()"> Generate </button>
@@ -95,6 +109,13 @@
 <script> 
     const temperature = document.getElementById("temperature")
     const temepratureValue = document.getElementById("temperatureValue")
+
+    const top_p = document.getElementById("top_p");
+    const topPValue = document.getElementById("topPValue")
+
+    top_p.addEventListener("input", () => {
+        topPValue.textContent = top_p.value;
+    });
 
     temperature.addEventListener("input", () => {
         temepratureValue.textContent = temperature.value
@@ -113,7 +134,8 @@
             },
             body: JSON.stringify({
                 prompt: prompt,
-                temperature: parseFloat(temperature.value)
+                temperature: parseFloat(temperature.value),
+                top_p: parseFloat(top_p.value)
             })
         });
 

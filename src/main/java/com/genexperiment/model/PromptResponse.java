@@ -4,11 +4,13 @@ public class PromptResponse {
     private String response;
     private String prompt;
     private double temperature;
+    private double top_p;
 
-    public PromptResponse(String response, String prompt, double temperature) {
+    public PromptResponse(String response, String prompt, double temperature, double top_p) {
         this.response = response;
         this.prompt = prompt;
         this.temperature = temperature;
+        this.top_p = top_p;
     }
 
     public String getResponse() {
@@ -33,5 +35,13 @@ public class PromptResponse {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    public double getTop_p() {
+        return top_p;
+    }
+
+    public void setTop_p(double top_p) {
+        this.top_p = top_p;
     }
 }
