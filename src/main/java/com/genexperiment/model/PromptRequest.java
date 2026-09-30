@@ -4,6 +4,8 @@ public class PromptRequest {
     private String prompt;
     private double temperature;
     private double top_p;
+    private int seed;
+    private int maxTokens;
 
     public String getPrompt() {
         return prompt;
@@ -27,5 +29,21 @@ public class PromptRequest {
 
     public void setTop_p(double top_p) {
         this.top_p = top_p;
+    }
+
+    public int getSeed() {
+        return seed;
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
+    }
+
+    public int getMaxTokens() {
+        return maxTokens;
+    }
+
+    public void setMaxTokens(int maxTokens) {
+        this.maxTokens = maxTokens;
     }
 }

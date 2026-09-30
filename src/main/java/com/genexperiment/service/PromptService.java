@@ -18,11 +18,11 @@ public class PromptService {
         this.restClient = RestClient.builder().baseUrl("http://localhost:11434").build();
     }
 
-    public String generateResponse(String prompt, double temperature, double top_p) {
+    public OllamaResponse generateResponse(String prompt, double temperature, double top_p, int seed, int maxTokens) {
 
         Map<String, Object> body = Map.of("model", "qwen2.5:3b-instruct", "messages", List.of
             (Map.of("role", "user", "content", prompt)), "stream", false, "options",
-            Map.of("temperature", temperature, "top_p", top_p));
+            Map.of("temperature", temperature, "top_p", top_p, "seed", seed, "num_predict", maxTokens));
 
 
 
@@ -32,6 +32,6 @@ public class PromptService {
             .retrieve()
             .body(OllamaResponse.class);
 
-        return response.getMessage().getContent();
+        return response;
     }
 }

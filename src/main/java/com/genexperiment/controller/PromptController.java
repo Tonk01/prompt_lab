@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.genexperiment.model.OllamaResponse;
 import com.genexperiment.model.PromptRequest;
 import com.genexperiment.model.PromptResponse;
 import com.genexperiment.service.PromptService;
@@ -21,9 +22,21 @@ public class PromptController {
 
     @PostMapping("/prompt")
     public PromptResponse handlePrompt(@RequestBody PromptRequest request) {
-        String response = promptService.generateResponse(
-            request.getPrompt(), request.getTemperature(), request.getTop_p());
+        OllamaResponse ollamaResponse = promptService.generateResponse(
+            request.getPrompt(), 
+            request.getTemperature(), 
+            request.getTop_p(), 
+            request.getSeed(), 
+            request.getMaxTokens());
 
-        return new PromptResponse(response, request.getPrompt(), request.getTemperature(), request.getTop_p());
+        return new PromptResponse(ollamaResponse.getMessage().getContent(), 
+            request.getPrompt(), 
+            request.getTemperature(),
+            request.getTop_p(),
+            request.getSeed(),
+            request.getMaxTokens(),
+            ollamaResponse.getPromptEvalCount(),
+            ollamaResponse.getEvalCount()
+        );
     }
 }

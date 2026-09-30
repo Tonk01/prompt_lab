@@ -56,6 +56,17 @@
             background: #1e1e1e;
             border-radius: 6px;
             white-space: pre-wrap;
+
+            
+        }
+
+        #tokenInfo {
+        margin-top: 12px;
+        color: #aaaaaa;
+        font-size: 14px;
+        display: flex;
+        gap: 20px;
+
         }
 
     </style>
@@ -99,11 +110,35 @@
             step="0.05"
             value="0.9"
         >
+        
+        <label for="maxTokens"> Seed </label>
+        <input 
+            id="seed"
+            type="number"
+            value="42"
+            step="1"
+        >
+        
+        <label for="maxTokens"> Max Tokens </label>
+        <input
+            id="maxTokens"
+            type="number"
+            value="500"
+            min="1"
+            step="1"
+        >
     </div>
 
     <button onclick="generate()"> Generate </button>
 
     <div id="response"></div>
+
+    <div id="tokenInfo">
+        <span>Prompt Tokens: <strong id="promptTokens"> 0 </strong></span>
+        <span> Generated Tokens: <strong id="generatedTokens"> 0</strong></span>
+        <span> Total Tokens: <strong id="totalTokens"> 0 </strong></span>
+
+    </div>
 </div>
 
 <script> 
@@ -112,6 +147,9 @@
 
     const top_p = document.getElementById("top_p");
     const topPValue = document.getElementById("topPValue")
+
+    const seed = document.getElementById("seed");
+    const maxTokens = document.getElementById("maxTokens")
 
     top_p.addEventListener("input", () => {
         topPValue.textContent = top_p.value;
@@ -135,12 +173,18 @@
             body: JSON.stringify({
                 prompt: prompt,
                 temperature: parseFloat(temperature.value),
-                top_p: parseFloat(top_p.value)
+                top_p: parseFloat(top_p.value),
+                seed: parseInt(seed.value),
+                maxTokens: parseInt(maxTokens.value)
             })
         });
 
         const data = await response.json();
         responseBox.textContent = data.response;
+        document.getElementById("promptTokens").textContent = data.promptTokens;
+        document.getElementById("generatedTokens").textContent = data.generatedTokens;
+        document.getElementById("totalTokens").textContent = data.generatedTokens;
+
     }
 
 </script>
