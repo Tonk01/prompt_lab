@@ -69,6 +69,27 @@
 
         }
 
+        #chat {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+
+        .user {
+            background: #2a2a2a;
+        }
+
+        .assistant {
+            background: #1e1e1e;
+        }
+
     </style>
 </head>
 
@@ -77,10 +98,11 @@
 <div class="container">
     <h1> Prompt Lab</h1>
 
+    
     <textarea
         id="prompt"
-        placeholder="Enter a prompt"
-        ></textarea>
+        placeholder="Enter prompt"
+    ></textarea>
 
     <div class="temperature">
         <label>
@@ -111,7 +133,7 @@
             value="0.9"
         >
         
-        <label for="maxTokens"> Seed </label>
+        <label for="seed"> Seed </label>
         <input 
             id="seed"
             type="number"
@@ -130,8 +152,8 @@
     </div>
 
     <button onclick="generate()"> Generate </button>
-
-    <div id="response"></div>
+    
+    <div id="chat"></div>
 
     <div id="tokenInfo">
         <span>Prompt Tokens: <strong id="promptTokens"> 0 </strong></span>
@@ -151,6 +173,8 @@
     const seed = document.getElementById("seed");
     const maxTokens = document.getElementById("maxTokens")
 
+    const chat = document.getElementById("chat");
+
     top_p.addEventListener("input", () => {
         topPValue.textContent = top_p.value;
     });
@@ -161,9 +185,12 @@
 
     async function generate() {
         const prompt = document.getElementById("prompt").value;
-        const responseBox = document.getElementById("response");
 
-        responseBox.textContent = "Generating...";
+        const userMessage = document.createElement("div")
+            userMessage.className = "message user";
+            userMessage.textContent = prompt;
+            chat.appendChild(userMessage);
+        
 
         const response = await fetch("/prompt", {
             method: "POST",
@@ -180,10 +207,15 @@
         });
 
         const data = await response.json();
-        responseBox.textContent = data.response;
+
         document.getElementById("promptTokens").textContent = data.promptTokens;
         document.getElementById("generatedTokens").textContent = data.generatedTokens;
-        document.getElementById("totalTokens").textContent = data.generatedTokens;
+        document.getElementById("totalTokens").textContent = data.promptTokens + data.generatedTokens;
+
+        const assistantMessage = document.createElement("div");
+        assistantMessage.className = "message assistant";
+        assistantMessage.textContent = data.response;
+        chat.appendChild(assistantMessage)
 
     }
 
